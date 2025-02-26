@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String
+  password      String
+  email         String    @unique
+  refresh       String    @default("")
+  contacts      Contact[]
+  groups        Group[]
+  wallpaperUrl  String    @default("https://clipground.com/images/user-icon-vector-png-6.png")
+  profilePicUrl String    @default("https://clipground.com/images/user-icon-vector-png-6.png")
+  Message       Message[]
+}
+
+model Contact {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  users         User[]
+  profilePicUrl String    @default("https://clipground.com/images/user-icon-vector-png-6.png")
+  isOnline      Boolean   @default(true)
+  unread        Int       @default(0)
+  messages      Message[]
+}
+
+model Group {
+  id            Int       @id @default(autoincrement())
+  name          String
+  adminId       Int
+  unread        Int       @default(0)
+  profilePicUrl String    @default("https://clipground.com/images/user-icon-vector-png-6.png")
+  members       User[]
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation(fields: [senderId], references: [id])
+  senderId   Int
+  message    String
+  uploadTime DateTime @default(now())
+  dateTime   DateTime @default(now())
+  unread     Boolean  @default(true)
+  Contact    Contact? @relation(fields: [contactId], references: [id])
+  contactId  Int?
+  Group      Group?   @relation(fields: [groupId], references: [id])
+  groupId    Int?
+}
