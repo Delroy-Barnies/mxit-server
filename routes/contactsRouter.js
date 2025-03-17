@@ -3,8 +3,9 @@ const contactsController = require("../controllers/contactsController");
 const usersController = require("../controllers/usersController");
 const contactsRouter = Router();
 
+contactsRouter.get("/", usersController.verifyToken, contactsController.get);
 contactsRouter.post("/add", usersController.verifyToken, contactsController.add);
-/*contactsRouter.post("/update", usersController.verifyToken, contactsController.update);*/
+contactsRouter.post("/update", usersController.verifyToken, contactsController.update);
 contactsRouter.delete("/delete", usersController.verifyToken, contactsController.delete);
 
 module.exports = contactsRouter;

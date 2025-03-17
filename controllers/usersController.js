@@ -6,6 +6,16 @@ const prisma = new PrismaClient();
 const ACCESS_TOKEN_SECRET = 'access_secret-key';
 const REFRESH_TOKEN_SECRET = 'refresh_secret-key';
 
+exports.get = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany();
+        if (!users) return res.status(404).json({ message: "No users registered" });
+        res.json(users);
+    } catch (error) {
+
+    }
+}
+
 exports.login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -80,13 +90,7 @@ exports.register = async (req, res) => {
                 email: email
             }
         });
-        const contact = await prisma.contact.create({
-            data: {
-                name: name,
-                email: email
-            }
-        });
-        res.json([user, contact]);
+        res.json([user]);
     });
 }
 
