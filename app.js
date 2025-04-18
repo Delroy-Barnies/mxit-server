@@ -8,9 +8,26 @@ const contactMessagesRouter = require("./routes/contactMessagesRouter");
 const groupMessagesRouter = require("./routes/groupMessagesRouter");
 const settingsRouter = require("./routes/settingsRouter");
 const groupsRouter = require("./routes/groupsRouter");
+const cors = require('cors');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://mxit-delroy-barnies-projects.vercel.app/"
+]
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 
 app.use("/", usersRouter);
 app.use("/contacts", contactsRouter);
