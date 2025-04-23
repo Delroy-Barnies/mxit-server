@@ -14,9 +14,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const allowedOrigins = [
-    "http://localhost:5173/",
-    "https://mxit-delroy-barnies-projects.vercel.app/",
-    "https://mxit.vercel.app/"
+    "http://localhost:5173",
+    "https://mxit-delroy-barnies-projects.vercel.app",
+    "https://mxit.vercel.app"
 ]
 
 app.use(cors({
