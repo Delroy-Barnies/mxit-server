@@ -19,7 +19,7 @@ const allowedOrigins = [
     "https://mxit.vercel.app"
 ]
 
-app.use(cors({
+app.use(cors(/*{
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
@@ -29,7 +29,7 @@ app.use(cors({
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-}));
+}*/));
 
 app.use("/", usersRouter);
 app.use("/contacts", contactsRouter);
