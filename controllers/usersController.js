@@ -46,6 +46,15 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.logout = async (req, res) =>{
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        sameSite: 'Strict',
+        secure: true // Set to true if using HTTPS
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+}
+
 // Endpoint to refresh access token
 exports.token = async (req, res) => {
     const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -75,7 +84,7 @@ exports.register = async (req, res) => {
     const confirmPassword = req.body.confirmPassword;
 
     const doesUserExist = await prisma.user.findFirst({ where: { email } });
-    if (doesUserExist) return res.status(401).json({ message: "User already exists with this email" });
+    if (doesUserExist) return res.status(401).json({ message: "User already exists with this email!" });
 
     if (password != confirmPassword) {
         return res.status(401).json({ message: "Passwords do not match!" })
