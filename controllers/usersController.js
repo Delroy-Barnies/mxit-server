@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid password' });
         }
         const token = jwt.sign({ user: user }, TOKEN_SECRET, { expiresIn: "2d" });
-        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: "Lax" });
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'None' });
         res.status(200).json({ message: 'Logged in' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
