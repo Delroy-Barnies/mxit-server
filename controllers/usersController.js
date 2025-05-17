@@ -3,8 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
-const ACCESS_TOKEN_SECRET = 'access_secret-key';
-const REFRESH_TOKEN_SECRET = 'refresh_secret-key';
+const TOKEN_SECRET = 'secret-key';
 
 exports.get = async (req, res) => {
     try {
@@ -19,7 +18,6 @@ exports.get = async (req, res) => {
 exports.login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    const rememberMe = req.body.remember;
     try {
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) {
@@ -29,47 +27,21 @@ exports.login = async (req, res) => {
         if (!validPassword) {
             return res.status(401).json({ message: 'Invalid password' });
         }
-        const accessToken = jwt.sign({ user: user }, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
-        const refreshToken = jwt.sign({ user: user }, REFRESH_TOKEN_SECRET, { expiresIn: "32d" });
-        await prisma.user.update(
-            { where: { email }, data: { refresh: refreshToken } }
-        )
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
-        res.json({ accessToken, refreshToken });
+        const token = jwt.sign({ user: user }, TOKEN_SECRET, { expiresIn: "2d" });
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: "Lax" });
+        res.status(200).json({ message: 'Logged in' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 }
 
 exports.logout = async (req, res) => {
-    res.clearCookie('refreshToken', {
+    res.clearCookie('token', {
         httpOnly: true,
         sameSite: 'Strict',
         secure: true // Set to true if using HTTPS
     });
     res.status(200).json({ message: 'Logged out successfully' });
-}
-
-// Endpoint to refresh access token
-exports.token = async (req, res) => {
-    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-    const users = await prisma.user.findMany();
-    const refreshTokens = users.map(user => {
-        return user.refresh;
-    })
-
-    console.log(refreshTokens);
-    console.log(refreshToken);
-
-    if (!refreshToken || !refreshTokens.includes(refreshToken)) {
-        return res.status(403).send('Refresh token not found');
-    }
-
-    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err) return res.status(403).send('Invalid refresh token');
-        const accessToken = jwt.sign({ user: user }, ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-        res.json({ accessToken });
-    });
 }
 
 exports.register = async (req, res) => {
