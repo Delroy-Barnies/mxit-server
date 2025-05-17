@@ -34,19 +34,14 @@ exports.login = async (req, res) => {
         await prisma.user.update(
             { where: { email }, data: { refresh: refreshToken } }
         )
-
-        if (rememberMe) {
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
-            res.send('Cookie has been set');
-        } else {
-            res.json({ accessToken, refreshToken });
-        }
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+        res.json({ accessToken, refreshToken });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 }
 
-exports.logout = async (req, res) =>{
+exports.logout = async (req, res) => {
     res.clearCookie('refreshToken', {
         httpOnly: true,
         sameSite: 'Strict',
