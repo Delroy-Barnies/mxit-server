@@ -71,14 +71,15 @@ exports.register = async (req, res) => {
 }
 
 exports.verifyToken = (req, res, next) => {
-    // Get auth header value
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader != 'undefined') {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
+    const token = req.cookies.token; // 👈 read from cookie
+    if (!token) {
+        return res.sendStatus(403); // Forbidden
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // You can now use req.user in routes
         next();
-    } else {
-        res.sendStatus(403);
+    } catch (err) {
+        return res.sendStatus(403); // Invalid or expired token
     }
 }
