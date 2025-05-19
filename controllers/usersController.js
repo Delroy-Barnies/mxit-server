@@ -71,12 +71,12 @@ exports.register = async (req, res) => {
 }
 
 exports.verifyToken = (req, res, next) => {
-    const token = req.cookie.token; // 👈 read from cookie
+    const token = req.cookies.token; // 👈 read from cookie
     if (!token) {
         return res.sendStatus(403); // Forbidden
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, TOKEN_SECRET);
         req.user = decoded; // You can now use req.user in routes
         next();
     } catch (err) {
