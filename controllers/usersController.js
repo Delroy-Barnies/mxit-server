@@ -72,6 +72,7 @@ exports.register = async (req, res) => {
 
 exports.verifyToken = (req, res, next) => {
     const token = req.cookies.token; // 👈 read from cookie
+    req.token = token;
     if (!token) {
         return res.sendStatus(403); // Forbidden
     }
