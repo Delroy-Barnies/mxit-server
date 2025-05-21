@@ -4,7 +4,7 @@ const usersRouter = Router();
 
 usersRouter.get("/users", usersController.get);
 usersRouter.post("/login", usersController.login);
-usersRouter.post("/logout", usersController.logout);
+usersRouter.post("/logout", usersController.verifyToken, usersController.logout);
 usersRouter.post("/register", usersController.register);
 
 module.exports = usersRouter;
