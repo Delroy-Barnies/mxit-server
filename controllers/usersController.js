@@ -15,6 +15,11 @@ exports.get = async (req, res) => {
     }
 }
 
+exports.userData = async (req, res) => {
+    const decoded = jwt.decode(req.token);
+    res.json(decoded);
+}
+
 exports.login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
