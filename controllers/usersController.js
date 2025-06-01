@@ -43,12 +43,11 @@ exports.login = async (req, res) => {
 exports.logout = async (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        sameSite: 'None', // match exactly
-        secure: true,     // match exactly
-        path: '/'         // optional but often necessary
+        sameSite: 'Strict',
+        secure: true // Set to true if using HTTPS
     });
     res.status(200).json({ message: 'Logged out successfully' });
-};
+}
 
 exports.register = async (req, res) => {
     const name = req.body.name;
