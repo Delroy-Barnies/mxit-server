@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({ where: { email }, include: { messages: true } });
         if (!user) {
             return res.status(401).json({ message: 'User does not exist with this email' });
         }
