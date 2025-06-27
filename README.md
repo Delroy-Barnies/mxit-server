@@ -8,15 +8,6 @@ All data is stored in a PostgreSQL database accessed via Prisma ORM.
 ***Express.js (v4.21.2 or higher)***
 ***ECMAScript 2024 (ES15)***
 
-## Tech Stack
-
-- Node.js (v24 or higher) – Runtime environment
-- Express.js (v4.21.2 or higher) – Web framework
-- Prisma ORM – Type-safe database access
-- PostgreSQL – Relational database
-- JavaScript – Backend language
-- ECMAScript 2024 (ES15) – Language version standard
-
 ## Installation
 
 Clone the repository:
@@ -37,6 +28,14 @@ npx prisma migrate dev
 Start the server:
 npm run dev
 
+## Tech Stack
+
+- Node.js (v24 or higher) – Runtime environment
+- Express.js (v4.21.2 or higher) – Web framework
+- Prisma ORM – Type-safe database access
+- PostgreSQL – Relational database
+- JavaScript – Backend language
+- ECMAScript 2024 (ES15) – Language version standard
 
 ## Contributors
 
