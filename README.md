@@ -4,16 +4,18 @@ Welcome! This is the backend API for my Mxit-inspired messaging application.
 Built with Node.js and Express, this API handles user authentication, contact management, group creation, and real-time messaging. 
 All data is stored in a PostgreSQL database accessed via Prisma ORM.
 
+***Node.js (v24 or higher)***
+***Express.js (v4.21.2 or higher)***
+***ECMAScript 2024 (ES15)***
+
+## Tech Stack
+
 - Node.js (v24 or higher) – Runtime environment
 - Express.js (v4.21.2 or higher) – Web framework
 - Prisma ORM – Type-safe database access
 - PostgreSQL – Relational database
 - JavaScript – Backend language
 - ECMAScript 2024 (ES15) – Language version standard
-
-***Node.js (v24 or higher)***
-***Express.js (v4.21.2 or higher)***
-***ECMAScript 2024 (ES15)***
 
 ## Installation
 
