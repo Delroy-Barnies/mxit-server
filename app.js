@@ -10,7 +10,7 @@ const groupsRouter = require("./routes/groupsRouter");
 const cors = require('cors');
 
 // Middlewares
-app.use(express.json()); // preferred over bodyParser.json()
+app.use(express.json());
 app.use(cookieParser());
 
 // CORS Setup
@@ -52,7 +52,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 10000; // also safe for Render.com
+const PORT = process.env.PORT || 10000; 
 app.listen(PORT, () => {
     console.log(`My first Express app - listening on port ${PORT}!`);
 });

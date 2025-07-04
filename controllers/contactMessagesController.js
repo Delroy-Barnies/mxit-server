@@ -28,7 +28,7 @@ exports.add = async (req, res) => {
     const decoded = jwt.decode(req.token);
     const contactId = Number(req.params.id);
     const message = req.body.message;
-    if (req.file.filename) {
+    if (req.file) {
         let file = null;
         await cloudinary.uploader
             .upload(`uploads/${req.file.filename}`, {
