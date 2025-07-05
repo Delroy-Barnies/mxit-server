@@ -57,7 +57,7 @@ exports.add = async (req, res) => {
 
 exports.addReply = async (req, res) => {
     const decoded = jwt.decode(req.token);
-    const contactId = Number(req.params.id);
+    const userId = Number(req.params.id);
     const message = req.body.message;
     if (req.file) {
         let file = null;
@@ -72,12 +72,13 @@ exports.addReply = async (req, res) => {
             .catch((error) => {
                 console.log("success", JSON.stringify(error, null, 2));
             })
-        const newMessage = await prisma.message.create({ data: { message: "", image: file.url, user: { connect: { id: contactId } }, contact: { connect: { id: decoded.user.id } } } });
+        const newMessage = await prisma.message.create({ data: { message: "", image: file.url, user: { connect: { id: userId } }, contact: { connect: { id: decoded.user.id } } } });
         deleteFile(`uploads/${req.file.filename}`);
         res.json(newMessage);
     } else {
         try {
-            const newMessage = await prisma.message.create({ data: { message, user: { connect: { id: contactId } }, contact: { connect: { id: decoded.user.id } } } });
+            const contact = await prisma.contact.findFirst({ where: { id: decoded.user.id } });
+            const newMessage = await prisma.message.create({ data: { message, user: { connect: { id: userId } }, contact: { connect: { id: contact.id } } } });
             res.json(newMessage);
         } catch (error) {
             res.status(500).json({ message: error });
