@@ -77,7 +77,7 @@ exports.addReply = async (req, res) => {
         res.json(newMessage);
     } else {
         try {
-            const contact = await prisma.contact.findFirst({ where: { id: decoded.user.id } });
+            const contact = await prisma.contact.findFirst({ where: { id: decoded.user.id, email: decoded.user.email } });
             const newMessage = await prisma.message.create({ data: { message, user: { connect: { id: userId } }, contact: { connect: { id: contact.id } } } });
             res.json(newMessage);
         } catch (error) {
