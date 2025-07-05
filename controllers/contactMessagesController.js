@@ -51,5 +51,37 @@ exports.add = async (req, res) => {
         } catch (error) {
             res.status(500).json({ message: error });
         }
+
+    }
+}
+
+exports.addReply = async (req, res) => {
+    const decoded = jwt.decode(req.token);
+    const contactId = Number(req.params.id);
+    const message = req.body.message;
+    if (req.file) {
+        let file = null;
+        await cloudinary.uploader
+            .upload(`uploads/${req.file.filename}`, {
+                resource_type: "auto",
+            })
+            .then((result) => {
+                file = result;
+                console.log("success");
+            })
+            .catch((error) => {
+                console.log("success", JSON.stringify(error, null, 2));
+            })
+        const newMessage = await prisma.message.create({ data: { message: "", image: file.url, user: { connect: { id: contactId } }, contact: { connect: { id: decoded.user.id } } } });
+        deleteFile(`uploads/${req.file.filename}`);
+        res.json(newMessage);
+    } else {
+        try {
+            const newMessage = await prisma.message.create({ data: { message, user: { connect: { id: contactId } }, contact: { connect: { id: decoded.user.id } } } });
+            res.json(newMessage);
+        } catch (error) {
+            res.status(500).json({ message: error });
+        }
+
     }
 }
