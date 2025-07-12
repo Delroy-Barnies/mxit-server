@@ -34,7 +34,11 @@ exports.add = async (req, res) => {
         const newContact = await prisma.contact.create({ data: { email, name, profilePicUrl: contactUser.profilePicUrl, user: { connect: { id: currentUser.id } }, contactedUser: { connect: { id: contactUser.id } } } });
         res.json(newContact);
     } catch (error) {
-        res.status(500).json({ message: error });
+        res.status(500).json({
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
     }
 
 }
