@@ -21,8 +21,8 @@ exports.userData = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const email = req.body.email.toLowerCase();
+    const password = req.body.password.toLowerCase();
     try {
         const user = await prisma.user.findUnique({ where: { email }, include: { messages: true } });
         if (!user) {
@@ -50,8 +50,8 @@ exports.logout = async (req, res) => {
 }
 
 exports.register = async (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email;
+    const name = req.body.name.toLowerCase();
+    const email = req.body.email.toLowerCase();
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
 

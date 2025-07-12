@@ -16,8 +16,8 @@ exports.get = async (req, res) => {
 
 exports.add = async (req, res) => {
     const decoded = jwt.decode(req.token);
-    const email = req.body.email;
-    const name = req.body.name;
+    const email = req.body.email.toLowerCase();
+    const name = req.body.name.toLowerCase();
     try {
         const currentUser = await prisma.user.findFirst({ where: { email: decoded.user.email }, include: { contacts: true } });
         if (!currentUser) return res.status(404).json({ message: "User not found" });
@@ -41,8 +41,8 @@ exports.add = async (req, res) => {
 
 exports.update = async (req, res) => {
     const decoded = jwt.decode(req.token);
-    const email = req.body.email;
-    const name = req.body.name;
+    const email = req.body.email.toLowerCase();
+    const name = req.body.name.toLowerCase();
     try {
         const currentUser = await prisma.user.findFirst({ where: { email: decoded.user.email }, include: { contacts: true } });
         const contactToUpdate = currentUser.contacts.find(contact => contact.email === email);
@@ -57,7 +57,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     const decoded = jwt.decode(req.token);
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     try {
         const currentUser = await prisma.user.findFirst({ where: { email: decoded.user.email }, include: { contacts: true } });
         if (!currentUser) return res.status(404).json({ message: "User not found" });
